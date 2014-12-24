@@ -35,6 +35,7 @@ import ml.shifu.shifu.core.dvarsel.VarSelMasterResult;
 import ml.shifu.shifu.core.dvarsel.VarSelOutput;
 import ml.shifu.shifu.core.dvarsel.VarSelWorker;
 import ml.shifu.shifu.core.dvarsel.VarSelWorkerResult;
+import ml.shifu.shifu.core.dvarsel.error.OptErrorWorkerConductor;
 import ml.shifu.shifu.core.dvarsel.wrapper.WrapperMasterConductor;
 import ml.shifu.shifu.core.dvarsel.wrapper.WrapperWorkerConductor;
 import ml.shifu.shifu.core.validator.ModelInspector.ModelStep;
@@ -239,7 +240,7 @@ public class VarSelectModelProcessor extends BasicModelProcessor implements Proc
                 Environment.getProperty(Environment.VAR_SEL_MASTER_CONDUCTOR, WrapperMasterConductor.class.getName())));
 
         args.add(String.format(NNConstants.MAPREDUCE_PARAM_FORMAT, Constants.VAR_SEL_WORKER_CONDUCTOR,
-                Environment.getProperty(Environment.VAR_SEL_MASTER_CONDUCTOR, WrapperWorkerConductor.class.getName())));
+                Environment.getProperty(Environment.VAR_SEL_MASTER_CONDUCTOR, OptErrorWorkerConductor.class.getName())));
 
         // setting queue
         args.add(String.format(NNConstants.MAPREDUCE_PARAM_FORMAT, NNConstants.MAPRED_JOB_QUEUE_NAME,

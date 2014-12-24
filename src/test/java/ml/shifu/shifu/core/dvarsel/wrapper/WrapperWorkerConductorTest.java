@@ -97,6 +97,7 @@ public class WrapperWorkerConductorTest {
         String tag = StringUtils.trim(fields[targetColumnId]);
 
         double[] inputs = new double[trainingDataSet.getDataColumnIdList().size()];
+        String[] raw = new String[trainingDataSet.getDataColumnIdList().size()];
         double[] ideal = new double[1];
 
         double significance = NNConstants.DEFAULT_SIGNIFICANCE_VALUE;
@@ -105,9 +106,10 @@ public class WrapperWorkerConductorTest {
 
         int i = 0;
         for ( Integer columnId : trainingDataSet.getDataColumnIdList() ) {
+            raw[i] = fields[columnId];
             inputs[i++] = Normalizer.normalize(columnConfigList.get(columnId), fields[columnId]);
         }
 
-        trainingDataSet.addTrainingRecord(new TrainingRecord(inputs, ideal, significance));
+        trainingDataSet.addTrainingRecord(new TrainingRecord(raw, inputs, ideal, significance));
     }
 }

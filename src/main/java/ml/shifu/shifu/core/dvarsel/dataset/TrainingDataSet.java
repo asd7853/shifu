@@ -64,4 +64,8 @@ public class TrainingDataSet {
     public List<Integer> getDataColumnIdList() {
         return this.dataColumnIdList;
     }
+
+    public TrainingRecord getTrainRecord(int index) {
+        return this.trainingRecords.get(index);
+    }
 }

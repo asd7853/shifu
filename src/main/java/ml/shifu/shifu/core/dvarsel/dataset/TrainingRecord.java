@@ -28,14 +28,20 @@ import org.encog.ml.data.basic.BasicMLDataPair;
  * Created on 11/24/2014.
  */
 public class TrainingRecord {
+    private String[] raw;
     private double[] inputs;
     private double[] ideal;
     private double significance;
 
-    public TrainingRecord(double[] inputs, double[] ideal, double significance) {
+    public TrainingRecord(String[] raw, double[] inputs, double[] ideal, double significance) {
+        this.raw = raw;
         this.inputs = inputs;
         this.ideal = ideal;
         this.significance = significance;
+    }
+
+    public String[] getRaw() {
+        return this.raw;
     }
 
     public double[] getInputs() {

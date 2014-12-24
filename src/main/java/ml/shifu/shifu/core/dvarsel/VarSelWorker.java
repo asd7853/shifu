@@ -174,6 +174,7 @@ public class VarSelWorker
                 this.posRecordCount ++;
             }
 
+            String[] raw = new String[this.inputNodeCount];
             double[] inputs = new double[this.inputNodeCount];
             double[] ideal = new double[this.outputNodeCount];
 
@@ -190,10 +191,11 @@ public class VarSelWorker
 
             int i = 0;
             for(Integer columnId: this.trainingDataSet.getDataColumnIdList()) {
+                raw[i] = fields[columnId];
                 inputs[i++] = Normalizer.normalize(columnConfigList.get(columnId), fields[columnId]);
             }
 
-            trainingDataSet.addTrainingRecord(new TrainingRecord(inputs, ideal, significance));
+            trainingDataSet.addTrainingRecord(new TrainingRecord(raw, inputs, ideal, significance));
         }
     }
 
