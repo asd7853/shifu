@@ -53,6 +53,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * {@link CommonUtils} is used to for almost all kinds of utility function in this framework.
@@ -978,6 +980,11 @@ public final class CommonUtils {
             }
         }
 
+        // if the type of column-i is confirmed ,then columnTypeConfirm[i] = true, else false;
+        // if the column type is target/meta or the column type is specified by categorialColumnFile
+        // then this column's type is regard as "confirmed".
+        boolean[] columnTypeConfirm = new boolean[columnConfigList.size()];
+        
         for(ColumnConfig config: columnConfigList) {
             config.setColumnFlag(null);
             config.setColumnType(ColumnType.N);
@@ -987,11 +994,13 @@ public final class CommonUtils {
             if(targetColumnName.equals(varName)) {
                 config.setColumnFlag(ColumnFlag.Target);
                 config.setColumnType(null);
+                columnTypeConfirm[config.getColumnNum()] = true;
             }
 
             if(setMeta.contains(varName)) {
                 config.setColumnFlag(ColumnFlag.Meta);
                 config.setColumnType(null);
+                columnTypeConfirm[config.getColumnNum()] = true;
             }
 
             if(setForceRemove.contains(varName)) {
@@ -1006,6 +1015,44 @@ public final class CommonUtils {
                 config.setColumnType(ColumnType.C);
             }
         }
+    }
+    
+    public static int[] autoDetectColumnType(ModelConfig modelConfig, List<ColumnConfig> columnConfigList, boolean[] confirm) {
+        
+        BufferedReader br = null;
+        try {
+            // take some records from dataset for variable type checking.
+            int minRecordsNum = 10;
+            List<String> records = new ArrayList<String>();
+            Reader reader = ShifuFileUtils.getReader(modelConfig.getDataSet().getDataPath(), modelConfig.getDataSet().getSource());
+            br = new BufferedReader(reader);
+            for(int i = 0; i < minRecordsNum; i++) {
+                String line = br.readLine();
+                if(StringUtils.isNotBlank(line)) {
+                    records.add(line);
+                } else {
+                    break;
+                }
+            }
+            
+            // do type checking.
+            Pattern isNumerical = Pattern.compile("(\\+|\\-)?\\d*\\.?\\d*");
+            for(String record: records) {
+                String[] vars = record.split(modelConfig.getDataSet().getDataDelimiter());
+                for(String var: vars) {
+                    if(isNumerical.matcher(var).matches()) {
+                        continue;
+                    } else {
+                        // TODO
+                    }
+                }
+            }
+        } catch (IOException e) {
+            
+        } finally {
+            IOUtils.closeQuietly(br);
+        }
+        return null;
     }
 
     /**
