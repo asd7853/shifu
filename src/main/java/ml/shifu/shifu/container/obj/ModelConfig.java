@@ -304,6 +304,11 @@ public class ModelConfig {
     public int getBinningExpectedNum() {
         return stats.getMaxNumBin();
     }
+    
+    @JsonIgnore
+    public Boolean isOneHotEncoding() {
+        return normalize.getOneHotEncoding();
+    }
 
     @JsonIgnore
     public BinningMethod getBinningMethod() {

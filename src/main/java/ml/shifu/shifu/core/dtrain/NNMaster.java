@@ -237,7 +237,8 @@ public class NNMaster implements MasterComputable<NNParams, NNParams> {
     private NNParams initWeights() {
         NNParams params = new NNParams();
 
-        int[] inputAndOutput = NNUtils.getInputOutputCandidateCounts(this.columnConfigList);
+        // TODO xiaobin: if one-hot encoding is used, then the input nodes number will be different with columnConfig size.
+        int[] inputAndOutput = NNUtils.getInputOutputCandidateCounts(this.columnConfigList, modelConfig.isOneHotEncoding());
         int inputNodeCount = inputAndOutput[0] == 0 ? inputAndOutput[2] : inputAndOutput[0];
         int outputNodeCount = inputAndOutput[1];
 

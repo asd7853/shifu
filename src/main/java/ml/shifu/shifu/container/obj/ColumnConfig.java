@@ -208,6 +208,21 @@ public class ColumnConfig {
     public List<String> getBinCategory() {
         return columnBinning.getBinCategory();
     }
+    
+    /**
+     * Get the actual amount of columns this column occupied after normalize step which will
+     * also affect following steps.
+     * 
+     * @return return N for a categorical column with N classes if one-hot encoding is used, else return 1.
+     */
+    @JsonIgnore
+    public int actualColumnOccupied(Boolean isOneHotEncoding) {
+        if(isOneHotEncoding && isCategorical()) {
+            return columnBinning.getBinCategory().size();
+        } else {
+            return 1;
+        }
+    }
 
     /**
      * @return

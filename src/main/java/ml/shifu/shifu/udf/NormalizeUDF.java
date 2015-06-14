@@ -42,6 +42,10 @@ import org.apache.pig.impl.util.Utils;
 /**
  * NormalizeUDF class normalize the training data
  */
+/**
+ * @author xiaobin
+ *
+ */
 public class NormalizeUDF extends AbstractTrainerUDF<Tuple> {
 
     private List<String> negTags;
@@ -119,8 +123,13 @@ public class NormalizeUDF extends AbstractTrainerUDF<Tuple> {
             if(!CommonUtils.isGoodCandidate(config)) {
                 tuple.append(null);
             } else {
-                Double normVal = Normalizer.normalize(config, val, cutoff, normType);
-                tuple.append(df.format(normVal));
+                if(modelConfig.isOneHotEncoding() && config.isCategorical()) {
+                    // TODO oneHotEncoding for categorical.
+                    oneHotEncodeAppend(tuple, val, config);
+                } else {
+                    Double normVal = Normalizer.normalize(config, val, cutoff, normType);
+                    tuple.append(df.format(normVal));
+                }
             }
         }
 
@@ -129,6 +138,36 @@ public class NormalizeUDF extends AbstractTrainerUDF<Tuple> {
         tuple.append(weight);
 
         return tuple;
+    }
+  
+    
+    /**
+     * Turn categorical type value into one-hot encoded value and 
+     * append it to the given tuple. If the raw value is not a valid
+     * category, then a all-zero encoded sequence will be appended.
+     * 
+     * <p>Notice: only used for categorical type value.</p>
+     * 
+     * @param tuple the tuple to be appended
+     * @param val the raw String value of categorical type 
+     * @param config ColumnConfig 
+     */
+    private void oneHotEncodeAppend(Tuple tuple, String val, ColumnConfig config) {
+        int index = CommonUtils.getBinNum(config, val);
+        if(index == -1) {
+            // invalid categorical value
+            for (int i = 0; i < config.getBinCategory().size(); i++) {
+                tuple.append("0");
+            }
+        } else {
+            for (int i = 0; i < config.getBinCategory().size(); i++) {
+                if(i == index) {
+                    tuple.append("1");
+                } else {
+                    tuple.append("0");
+                }
+            }
+        }
     }
     
     /**

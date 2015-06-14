@@ -194,7 +194,7 @@ public class NNWorker extends
         this.epochsPerIteration = epochsPerIterationInteger == null ? 1 : epochsPerIterationInteger.intValue();
         LOG.info("epochsPerIteration in worker is :{}", epochsPerIteration);
 
-        int[] inputOutputIndex = NNUtils.getInputOutputCandidateCounts(this.columnConfigList);
+        int[] inputOutputIndex = NNUtils.getInputOutputCandidateCounts(this.columnConfigList, modelConfig.isOneHotEncoding());
         this.inputNodeCount = inputOutputIndex[0] == 0 ? inputOutputIndex[2] : inputOutputIndex[0];
         this.outputNodeCount = inputOutputIndex[1];
         this.candidateCount = inputOutputIndex[2];

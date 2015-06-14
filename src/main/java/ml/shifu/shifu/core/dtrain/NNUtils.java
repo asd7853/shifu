@@ -143,13 +143,36 @@ public final class NNUtils {
      *             if columnConfigList or ColumnConfig object in columnConfigList is null.
      */
     public static int[] getInputOutputCandidateCounts(List<ColumnConfig> columnConfigList) {
+        return getInputOutputCandidateCounts(columnConfigList, false);
+    }
+    
+    /**
+     * Get input nodes number (final select) and output nodes number from column config, and candidate input node
+     * number.
+     * 
+     * <p>
+     * If isOneHot is true, it means that categorical column is represented with a one-hot encoded value.
+     * </p>
+     * 
+     * <p>
+     * If number of column in final-select is 0, which means to select all non meta and non target columns. So the input
+     * number is set to all candidates.
+     * </p>
+     * 
+     * @param columnConfigList list of ColumnConfig.
+     * @param isOneHot ont-hot encoding or not.
+     * 
+     * @throws NullPointerException
+     *             if columnConfigList or ColumnConfig object in columnConfigList is null.
+     */
+    public static int[] getInputOutputCandidateCounts(List<ColumnConfig> columnConfigList, Boolean isOneHot) {
         int input = 0, output = 0, candidate = 0;
         for(ColumnConfig config: columnConfigList) {
             if(!config.isTarget() && !config.isMeta()) {
-                candidate++;
+                candidate += config.actualColumnOccupied(isOneHot);
             }
             if(config.isFinalSelect()) {
-                input++;
+                input += config.actualColumnOccupied(isOneHot);
             }
             if(config.isTarget()) {
                 output++;

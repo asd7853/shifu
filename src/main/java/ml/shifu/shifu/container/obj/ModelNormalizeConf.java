@@ -35,8 +35,9 @@ public class ModelNormalizeConf {
     private Double stdDevCutOff = Double.valueOf(4.0);
     private Double sampleRate = Double.valueOf(1.0);
     private Boolean sampleNegOnly = Boolean.FALSE;
+    private Boolean oneHotEncoding = Boolean.FALSE;
     private NormType normType = NormType.ZSCALE;
-
+    
     // move to RawSourceData
     // private String weightAmplifier;
     // private List<WeightAmplifier> weightAmplifier;
@@ -63,6 +64,14 @@ public class ModelNormalizeConf {
 
     public void setSampleNegOnly(Boolean sampleNegOnly) {
         this.sampleNegOnly = sampleNegOnly;
+    }
+    
+    public Boolean getOneHotEncoding() {
+        return oneHotEncoding;
+    }
+    
+    public void setOneHotEncoding(Boolean oneHotEncoding) {
+        this.oneHotEncoding = oneHotEncoding;
     }
 
     /**

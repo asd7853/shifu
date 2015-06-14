@@ -338,6 +338,13 @@ public class ModelInspector {
             result = ValidateResult.mergeResult(result, tmpResult);
         }
         
+        if(norm.getOneHotEncoding() == null) {
+            ValidateResult tmpResult = new ValidateResult(true);
+            tmpResult.setStatus(false);
+            tmpResult.getCauses().add("oneHotEncoding should be true/false in normalize configuration");
+            result = ValidateResult.mergeResult(result, tmpResult);
+        }
+        
         if(norm.getNormType() == null) {
             ValidateResult tmpResult = new ValidateResult(true);
             tmpResult.setStatus(false);

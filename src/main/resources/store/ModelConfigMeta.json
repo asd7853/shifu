@@ -346,6 +346,11 @@
                 "type": "boolean",
                 "directive": "checkbox",
                 "defval" : false
+            }, {
+                "name": "oneHotEncoding",
+                "type": "boolean",
+                "directive": "checkbox",
+                "defval" : false
             }
         ]
     }, {
